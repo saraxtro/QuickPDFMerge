@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Or your default branch, like 'master'
+permissions:
+  contents: write
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Install Bun
+      uses: oven-sh/setup-bun@v1
+
+    - name: Install Dependencies
+      run: bun install
+
+    - name: Build
+      run: bun run build  # Replace with your build command if different
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages  # The target branch for pages deployment
+        folder: build     # The folder to deploy
+        token: ${{ secrets.GITHUB_TOKEN }}  # Uses the GITHUB_TOKEN secret for authentication
+
